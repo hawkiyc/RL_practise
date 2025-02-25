@@ -134,13 +134,16 @@ class Agent():
         self.target_qnetwork = Network(action_size, state_shape).to(device)
         self.opt = optim.Adam(self.local_qnetwork.parameters(), lr=lr)
         self.memory = ReplayBuffer(replay_buffer_size, batch_size, seed)
+        # self.time_step = 0
     
     def step(self, state, action, reward, next_state, done):
         # 預處理後並將 tensor 轉為 numpy 陣列（去掉 batch 維度）
         state_np = preprocess_frame(state).squeeze(0).cpu().numpy()
         next_state_np = preprocess_frame(next_state).squeeze(0).cpu().numpy()
         self.memory.add(state_np, action, reward, next_state_np, done)
-        
+        # self.time_step = (self.time_step + 1) % 4
+
+        # if self.time_step == 0:
         if len(self.memory) >= batch_size:
             experiences = self.memory.sample()
             self.learn(experiences, gamma)
@@ -221,7 +224,7 @@ for episode in range(1, number_episodes + 1):
         print(f"\nNew best model saved at episode {episode} with average score: {best_score:.3f}")
     
     # 可依需求設定環境解決條件
-    if current_avg >= 800.0:
+    if current_avg >= 600.0:
         print(f'\nEnvironment solved in {episode - 100:d} episodes!\tAverage Score: {current_avg:.3f}')
         break
 
@@ -264,3 +267,4 @@ def show_video():
         print("Could not find video")
 
 show_video()
+# %%
