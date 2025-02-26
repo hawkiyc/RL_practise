@@ -125,7 +125,7 @@ print('Action Meanings:', env.env.env.get_action_meanings())
 
 lr = 1e-4
 gamma = 0.99  # 折扣因子
-max_updates = 8000  # 全域更新次數上限
+max_updates = 20000  # 全域更新次數上限
 n_steps = 5         # n-step TD 參數
 eval_interval = 100 # 評估間隔（依全域更新次數計算）
 n_workers = 16       # worker 數量，可依需求調整
@@ -270,7 +270,7 @@ def evaluate_global(global_model, global_counter, max_updates, global_best_rewar
             eval_rewards = []
             env_eval = make_env()
             # 進行 10 個測試 episode
-            for _ in range(10):
+            for _ in range(50):
                 state, _ = env_eval.reset()
                 total_reward = 0
                 done = False
